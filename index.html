@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        *{
+            font-size: 40px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body{
+            background-color: lightblue;
+           
+        }
+        .container{
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <form onsubmit="convert()">
+            <label for="amt">Enter Amount in $</label>
+            <input type="number" step="any" placeholder="Amount in $$" id="amt">
+            <br><br>
+            <input type="submit" value="Convert">
+        </form>
+        <h2 id="msg"></h2>
+    </div>
+
+    <script>
+        function convert()
+        {
+            event.preventDefault();
+            let a=document.getElementById("amt");
+            let msg=document.getElementById("msg");
+
+            if(a.value=="")
+            {
+                alert("Please enter amount first");
+                msg.innerHTML="";
+                a.focus();
+                return;
+            }
+
+            let url="https://v6.exchangerate-api.com/v6/4a55b6178413726b470f19a9/latest/USD";
+            let amt=parseFloat(a.value);
+            fetch(url)
+            .then(res=>res.json())
+            .then(data=>
+                {
+                    let dollar=data.conversion_rates.INR;
+                    let rupees=dollar*amt;
+                    let ans="\u20B9 "+rupees.toFixed(2);
+                    msg.innerHTML=ans;
+                }
+            )
+            .catch(err=>alert(err));
+        }
+    </script>
+</body>
+</html>
